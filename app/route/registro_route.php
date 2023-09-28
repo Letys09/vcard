@@ -96,7 +96,7 @@ error_reporting(0);
 		});
 
         // Ruta para dar de baja un registro
-		$this->put('del/{id}', function ($req, $res, $args) {
+		$this->post('del/{id}', function ($req, $res, $args) {
 			return $res->withJson($this->model->registro->del($args['id']));
 		});
 

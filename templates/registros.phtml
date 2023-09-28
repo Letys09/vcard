@@ -210,6 +210,18 @@
 				$('#form-addRegistro').modal('show')
 			})
 
+			$('#tbl-items').on('click', '.btnDel', function(){
+				id = $(this).data('id')
+				$.post($apiUrl+'registro/del/'+id, function(response){
+					if(response.response){
+						getUsuarios()
+					}else{
+						toastr["error"]("¡Ocurrió un problema!", "No pudimos eliminar el registro.")
+					}
+				},'json')
+
+			})
+
 			function addUsuarioRow(item) {
 				item.checkin!=null?$count2++:null;
 				container = $('#tbl-items tbody');
@@ -239,6 +251,7 @@
 				actions.append('<a href="#" data-popup="tooltip" title="Editar" class="btnEdit text-primary" data-id="'+item.id+'"><i class="mdi mdi-pencil fa-lg"></i></a> ');
 				actions.append('<a href="#" data-popup="tooltip" title="vCard" class="btnVCard text-danger" data-codigo="'+codigo+'" data-id="'+item.id+'"><i class="mdi mdi-account-card-details fa-lg"></i></a> ');
 				actions.append('<a href="#" data-popup="tooltip" title="Imprimir" class="btnPrint text-info" data-id="'+item.id+'"><i class="mdi mdi-printer fa-lg"></i></a> ');
+				actions.append('<a href="#" data-popup="tooltip" title="Eliminar" class="btnDel text-danger" data-id="'+item.id+'"><i class="mdi mdi-eraser fa-lg"></i></a> ');
 			}
 
 			$('body').on('click', '.btnCheckin', function(e){
