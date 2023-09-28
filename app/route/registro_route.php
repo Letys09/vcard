@@ -179,20 +179,23 @@ error_reporting(0);
 		$this->get('vcard/todosalv/', function($req, $res, $args){
 			ini_set('memory_limit','640M');
 			$registros = $this->model->registro->getAll()->result;
-			// $registro = $this->model->registro->get($args['id'])->result;
 
 			foreach ($registros as $registro) {
-				$qrCode = $registro->id.'WEFI'.$registro->id;
-				$dataQr = $this->model->registro->doVCardObj($registro);
-	
-				$fileUrlVcard = 'data/qr/'.$qrCode.'_vcard.png';
-				$qrUrlVcard = 'https://chart.googleapis.com/chart?cht=qr&chld=H|1&chs=400x400&chl='.urlencode($dataQr);
-				$QRvCard = file_get_contents($qrUrlVcard);
-				$fileVcard = fopen($fileUrlVcard, 'w');
-				fwrite($fileVcard, $QRvCard);
-				fclose($fileVcard);
+				if($registro->vcard == 0){
+					$vcard = array('vcard' => 1);
+					$resultado = $this->model->registro->edit($vcard, $registro->id);
+					
+					$qrCode = $registro->id.'WEFI'.$registro->id;
+					$dataQr = $this->model->registro->doVCardObj($registro);
+		
+					$fileUrlVcard = 'data/qr/'.$qrCode.'_vcard.png';
+					$qrUrlVcard = 'https://chart.googleapis.com/chart?cht=qr&chld=H|1&chs=400x400&chl='.urlencode($dataQr);
+					$QRvCard = file_get_contents($qrUrlVcard);
+					$fileVcard = fopen($fileUrlVcard, 'w');
+					fwrite($fileVcard, $QRvCard);
+					fclose($fileVcard);
+				}
 			}
-
 
 			echo 'LISTO!';
 		});
